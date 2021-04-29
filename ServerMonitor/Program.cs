@@ -1,11 +1,10 @@
 /******************************************************
-Windows Process Monitoring Tool
+Windows Process Monitoring Tool in C# 
 - CPU/RAM/Running Status Monitoring, kill and restart process 
-C# 
   
  *
  Author Shuo Ding 
- * Copyright ©2021   All Right Reserved 
+ * Copyright© 2021    
  * */
 
  
@@ -181,7 +180,7 @@ namespace ServerMonitor
                             foreach (Process process in runningNow)
                             {
                                 cpuCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
-                                ramCounter = new PerformanceCounter("Process", "Working Set - Private", process.ProcessName);
+                                ramCounter = new PerformanceCounter("Process", "Working Ram", process.ProcessName);
                                 if (process.ProcessName == processname)
                                 {
                                     cpuCounter.NextValue();
@@ -197,16 +196,16 @@ namespace ServerMonitor
                                     {   //log to file 
                                         file.WriteLine(string.Format("--Running {0} Monitor at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
                                     }
-                                    if (IsUsingToLessResources())
+                                    if (IsLessUseResources())
                                     {
-                                        Console.WriteLine(string.Format("Use Too less process: Killing {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
-                                        file.WriteLine(string.Format("Use Too less process: Killing {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
+                                        Console.WriteLine(string.Format("Use less resources process: Killing {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
+                                        file.WriteLine(string.Format("Use less resources process: Killing {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
                                         if (killEnable)
                                         {
                                             try
                                             {
-                                                Console.WriteLine("Try to Close window box too low process \n");
-                                                file.WriteLine("Try to Close window box too low process \n");
+                                                Console.WriteLine("Try to close window box too low process \n");
+                                                file.WriteLine("Try to close window box too low process \n");
                                                 // process.Kill(); //Kills the running process.                             
                                                 //process.WaitForExit();  
                                                 // process.Dispose();
@@ -245,18 +244,7 @@ namespace ServerMonitor
                                                     file.WriteLine("Closed crash app box Fail\n");
                                                 }
 
-                                                /*
-                                                   string TaskKiller = "taskkill /f /im " + processname;
-                                                  ProcessStartInfo info = new ProcessStartInfo("cmd.exe", "/c " + TaskKiller);
-                                                  info.RedirectStandardError = true;
-                                                  info.RedirectStandardInput = true;
-                                                  info.RedirectStandardOutput = true;
-                                                  info.UseShellExecute = false;
-                                                  info.CreateNoWindow = true;
-                                                  Process killprocess = new Process();
-                                                  killprocess.StartInfo = info;
-                                                  killprocess.Start();
-                                                  killprocess.StandardOutput.ReadToEnd(); */
+                    
                                             }
                                             catch (Exception exception)
                                             {
@@ -271,10 +259,10 @@ namespace ServerMonitor
                                         }
                                         file.Flush();
                                     }
-                                    if (IsUsingToMuchResources())
+                                    if (IsOverUseResources())
                                     {
-                                        Console.WriteLine(string.Format("Killing Too Much {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
-                                        file.WriteLine(string.Format("Killing Too Much {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
+                                        Console.WriteLine(string.Format("Killing Over Use {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
+                                        file.WriteLine(string.Format("Killing Over Use {0} at {1} CPU: {2}% RAM: {3} Mb\n", processname, DateTime.Now.ToString(), cpuCounter.NextValue(), ramCounter.NextValue() / (1024 * 1024)));
                                         if (killEnable)
                                         {
                                             try
@@ -332,22 +320,17 @@ namespace ServerMonitor
                     }//while       
             }
 
-            private bool IsUsingToMuchResources()
+            private bool IsOverUseResources()
             {
                 bool res = (ramCounter.NextValue() / (1024 * 1024)) > ramThreashold || cpuCounter.NextValue() > cpuThreashold;
                 return res;
             }
-            private bool IsUsingToLessResources()
+            private bool IsLessUseResources()
             {
                 bool res = (ramCounter.NextValue() / (1024 * 1024)) < 0.08;
                 return res;
-            }
-
-            /// <summary>
-            /// Kills the running process, selects the process from the function input
-            /// parameter.
-            /// </summary>
-            /// <param name="program">The running process name.</param> 
+            } 
+           
         }
 
     }
