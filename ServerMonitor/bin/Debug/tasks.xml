@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Monitor>
+  <task id="1">
+    <process>exampleApp</process>
+    <filename>exampleApp.exe</filename>
+    <workpath>D:\workplace</workpath>
+    <killenable>yes</killenable>
+    <memorythreshold>1.7</memorythreshold>	 
+	<cputhreshold>60</cputhreshold>
+	<logfile>D:\workplace\tracking.txt</logfile>
+	<sleepinvervalms>10000</sleepinvervalms>
+   
+  </task>   
+</Monitor>
