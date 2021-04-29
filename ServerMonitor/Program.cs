@@ -97,9 +97,7 @@ namespace ServerMonitor
                 return true;
             }
 
-
-            /// Constructor.
-            /// </summary>
+ 
             public ProcessMonitor()
             {
                 //default setting 
@@ -145,9 +143,7 @@ namespace ServerMonitor
                 Console.WriteLine("Init XML OK\n");
                 return 0;
             }
-
-            /// Determines if the process is running or NOT.
-            /// </summary>
+ 
 
             public bool IsProcessRunning()
             {
@@ -157,16 +153,7 @@ namespace ServerMonitor
                 return (proc.Length > 0 && proc != null);
             }
 
-            /* 
-            Call this method every time you need to get 
-            the amount of the available RAM in Mb 
-            */
-
-            /// <summary>
-
-            /// Monitors the running program.
-
-            /// </summary>
+ 
 
             public void Monitor()
             {
